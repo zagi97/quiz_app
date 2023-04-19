@@ -26,7 +26,7 @@ class _QuizState extends State<Quiz> {
   } */
 
   //Kada se activeScreen promijeni, build() metoda se poziva i ponovno ispisuje UI
-  void switchScreen() {
+ void switchScreen() {
     setState(() {
       activeScreen = 'questions-screen';
     });
@@ -37,10 +37,16 @@ class _QuizState extends State<Quiz> {
 
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
         activeScreen = 'results-screen';
       });
     }
+  }
+
+  void restartQuiz(){
+    setState(() {
+      selectedAnswers = [];
+      activeScreen = 'questions-screen';
+    });
   }
 
   @override
@@ -50,12 +56,14 @@ class _QuizState extends State<Quiz> {
         : const QuestionsScreen(); //if false */
 
     Widget screenWidget = StartScreen(switchScreen);
+
+    
     if (activeScreen == 'questions-screen') {
       screenWidget = QuestionsScreen(onSelectedAnswer: chooseAnswer);
     }
 
     if (activeScreen == 'results-screen') {
-      screenWidget = ResultsScreen(chosenAnswers: selectedAnswers);
+      screenWidget = ResultsScreen(chosenAnswers: selectedAnswers, onRestart: restartQuiz,);
     }
 
     return MaterialApp(
